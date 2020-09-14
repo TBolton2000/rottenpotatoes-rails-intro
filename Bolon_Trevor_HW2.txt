@@ -1,0 +1,5 @@
+Github Link:
+https://github.com/TBolton2000/rottenpotatoes-rails-intro
+
+Heroku Link:
+https://safe-chamber-85792.herokuapp.com/
