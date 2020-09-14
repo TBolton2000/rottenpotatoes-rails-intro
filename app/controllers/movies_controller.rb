@@ -4,6 +4,11 @@ class MoviesController < ApplicationController
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
 
+  def create
+    session[:sortby] = "none"
+    session[:ratings] = Hash[Movie.all_ratings.collect { |item| [item, "1"] } ]
+  end
+
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
@@ -12,9 +17,37 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.all_ratings
-    @sortby = params[:sortby]
+    
+    puts "sortby session", session[:sortby]
+    puts "sortby params", params[:sortby]
+    
+    puts "ratings", session[:ratings]
+    puts "ratings params", params[:ratings]
+    
+    if not params[:sortby] and not session[:sortby]
+      if not params[:ratings]
+        flash.keep
+        redirect_to movies_path({sortby: "none", ratings: session[:ratings]})
+      else
+        flash.keep
+        redirect_to movies_path({sortby: "none", ratings: params[:ratings]})
+      end
+    elsif not params[:sortby]
+      if not params[:ratings]
+        flash.keep
+        redirect_to movies_path({sortby: session[:sortby], ratings: session[:ratings]})
+      else
+        flash.keep
+        redirect_to movies_path({sortby: session[:sortby], ratings: params[:ratings]})
+      end
+    end
+    
+    @sortby = params[:sortby] if params[:sortby] != "none"
     @ratings = params[:ratings] ? params[:ratings].keys : @all_ratings
     @movies = Movie.with_ratings(@ratings).order(@sortby).all
+    
+    session[:sortby] = @sortby
+    session[:ratings] = Hash[@ratings.collect { |item| [item, "1"] } ]
   end
 
   def new

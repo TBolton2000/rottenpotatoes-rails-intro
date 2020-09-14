@@ -11,9 +11,9 @@
 %table#movies.table.table-striped.col-md-12
   %thead
     %tr
-      %th{class: [@sortby == "title" && "hilite"]}= link_to "Movie Title", {sortby: "title"}
+      %th{class: [@sortby == "title" && "hilite"]}= link_to "Movie Title", movies_path({sortby: (@sortby == "title" ? "none" : "title"), ratings: Hash[@ratings.collect { |item| [item, "1"] } ]})
       %th Rating
-      %th{class: [@sortby == "release_date" && "hilite"]}= link_to "Release Date", {sortby: "release_date"}
+      %th{class: [@sortby == "release_date" && "hilite"]}= link_to "Release Date", movies_path({sortby: (@sortby == "release_date" ? "none" : "release_date"), ratings: Hash[@ratings.collect { |item| [item, "1"] } ]})
       %th More Info
   %tbody
     - @movies.each do |movie|
