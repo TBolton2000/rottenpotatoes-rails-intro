@@ -18,12 +18,6 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = Movie.all_ratings
     
-    puts "sortby session", session[:sortby]
-    puts "sortby params", params[:sortby]
-    
-    puts "ratings", session[:ratings]
-    puts "ratings params", params[:ratings]
-    
     if not params[:sortby] and not session[:sortby]
       if not params[:ratings]
         flash.keep
